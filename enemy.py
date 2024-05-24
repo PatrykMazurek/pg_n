@@ -1,38 +1,13 @@
 import pygame, math, random
 from board_map import *
+from hero import Hero
 
-class Enemy(pygame.sprite.Sprite):
+class Enemy(Hero):
 
-    def __init__(self, player, row, cell) -> None:
-        pygame.sprite.Sprite.__init__(self)
-        self.image = pygame.Surface((30,30))
-        self.image.fill((140,190,130))
-        self.rect = self.image.get_rect()
-        self.player = player
-        self.row = row
-        self.cell = cell
-        self.pose = pygame.math.Vector2(self.set_position(row, cell))
-        self.dest_pos = pygame.math.Vector2(self.set_position(row, cell))
-        self.rect.center = self.pose
+    def __init__(self, x, y, name, player):
+        super().__init__(x, y, name)
         self.speed = 1.5
-        self.behavior = random.choice(["agressive","neutral","passive"])
-        self.asction = None
-
-    def update(self, offset) -> None:
-        self.interaction()
-        self.pose += self.move_to()
-        if offset.x != 0 or offset.y != 0:
-            self.pose += offset
-            self.dest_pos += offset
-        self.rect.center = self.pose
-
-
-    def set_position(self, row, cell):
-        temp_pos = pygame.math.Vector2([0,0])
-        temp_pos.x = cell * 30 + 15
-        temp_pos.y = row * 30 + 15
-        temp_pos += self.player.global_offset
-        return temp_pos
+        self.player = player
 
     def move(self, type):
         if type != None:
@@ -79,16 +54,6 @@ class Enemy(pygame.sprite.Sprite):
                             if board_map[self.row+1, self.cell] == 2:
                                 self.dest_pos = self.set_position(self.row, self.cell)
 
-
-    def move_to(self):
-        dx = self.dest_pos.x - self.rect.centerx
-        dy = self.dest_pos.y - self.rect.centery
-        distance = math.sqrt(dx**2 + dy**2)
-        if distance != 0:
-            dx /= distance
-            dy /= distance
-            return Vector2(dx * self.speed, dy * self.speed)
-        return Vector2(0,0)
 
     def check_distance(self):
         dx = self.player.pose.x - self.rect.centerx
