@@ -1,7 +1,6 @@
 import pygame
 from board_map import *
 
-
 class Item(pygame.surface.Surface):
 
     def __init__(self, row, cell, type) -> None:

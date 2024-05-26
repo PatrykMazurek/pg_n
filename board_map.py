@@ -1,4 +1,4 @@
-import pygame
+import pygame, os, random
 from pygame.math import Vector2
 import numpy as np
 
@@ -67,8 +67,10 @@ class BoardTile(pygame.sprite.Sprite):
             self.image = pygame.Surface(TILE_SIZE)
             self.image.fill((0,220,0))
         elif type == 2:
-            self.image = pygame.Surface(TILE_SIZE)
-            self.image.fill((220,0,0)) 
+            list_tile = ["kafel_1.png", "kafel_2.png", "kafel_3.png"]
+            self.image = pygame.image.load(os.path.join("assets", "map", random.choice(list_tile)) )
+            self.image = pygame.transform.rotate(self.image, random.choice([0, 90, 180, 270]))
+            # self.image.fill((220,0,0)) 
         self.rect = self.image.get_rect()
         self.rect.topleft = (x * TILE_SIZE[0], y * TILE_SIZE[1])
         

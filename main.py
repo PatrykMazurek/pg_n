@@ -1,9 +1,10 @@
-import pygame
+import pygame, os
 import numpy as np
 from board_map import *
 from player import Player
 from enemy import Enemy
 # from object_map import ObjectMap
+from sprite_animation import SpriteAnimation
 
 WIDTH, HEIGHT = 800, 650
 FPS = 60
@@ -15,12 +16,13 @@ clock = pygame.time.Clock()
 
 run = True
 
-def draw_window(win, board_group, player, enemies_group, coin_group):
+def draw_window(win, board_group, player, enemies_group, coin_group, animation):
     win.fill((30,30,30))
     board_group.draw(win)
     enemies_group.draw(win)
     coin_group.draw(win)
     win.blit(player.image, player.rect)
+    animation.draw(win)
     pygame.display.update()
 
 def check_collision(player, enemies):
@@ -45,6 +47,13 @@ all_enemies.add(Enemy(9, 8, player, "boch_1"))
 coins = pygame.sprite.Group()
 # coins.add(ObjectMap(5,7, "coin",player))
 
+sprite_img = pygame.image.load(os.path.join("assets", "objects", "torch.png"))
+animation_step = 6
+light_animation = SpriteAnimation(sprite_img, 5,7, animation_step, 16,28)
+
+countdown = 120
+last_update = pygame.time.get_ticks()
+
 while run:
     clock.tick(FPS)
     for event in pygame.event.get():
@@ -58,15 +67,23 @@ while run:
             if event.button == 3:
                 print(pygame.mouse.get_pos()[0])
 
+    current_time = pygame.time.get_ticks()
+    if (current_time - last_update) >= countdown:
+        last_update = current_time
+        light_animation.frame += 1
+        if light_animation.frame >= animation_step:
+            light_animation.frame = 0
+
     check_collision(player, all_enemies)
     offset = maps.determine_offset(pygame.mouse.get_pos(), WIDTH, HEIGHT)
     global_offset += offset
     board_wall.update(offset)
     player.update(offset)
     all_enemies.update(offset)
+    light_animation.update(offset)
     # coins.update(offset)
 
-    draw_window(win, board_wall, player, all_enemies, coins)
+    draw_window(win, board_wall, player, all_enemies, coins, light_animation)
 
 pygame.quit()
     
