@@ -2,8 +2,8 @@ import pygame
 
 class ObjectMap(pygame.sprite.Sprite):
 
-    def __init__(self, row, cell, type, player) -> None:
-        self.player = player
+    def __init__(self, row, cell, type, name=None, value=0) -> None:
+        self.name = name
         self.type = type
         self.row = row
         self.cell = cell
@@ -23,5 +23,5 @@ class ObjectMap(pygame.sprite.Sprite):
         temp_pos = pygame.math.Vector2([0,0])
         temp_pos.x = cell * 30 + 15
         temp_pos.y = row * 30 + 15
-        temp_pos += self.player.global_offset
+        # temp_pos += self.player.global_offset
         return temp_pos

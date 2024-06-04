@@ -5,6 +5,7 @@ from player import Player
 from enemy import Enemy
 # from object_map import ObjectMap
 from sprite_animation import SpriteAnimation
+from item import Item
 
 WIDTH, HEIGHT = 800, 650
 FPS = 60
@@ -46,6 +47,7 @@ all_enemies.add(Enemy(9, 8, player, "boch_1"))
 
 coins = pygame.sprite.Group()
 # coins.add(ObjectMap(5,7, "coin",player))
+# coins.add(Item(3, 5, "coin", value=10))
 
 sprite_img = pygame.image.load(os.path.join("assets", "objects", "torch.png"))
 animation_step = 6
