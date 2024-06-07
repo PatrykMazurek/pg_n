@@ -12,7 +12,7 @@ class SpriteAnimation:
         self.frame = 0
 
     def cut_image(self, x, width, height):
-        image = pygame.Surface((width, height)).convert_alpha()
+        image = pygame.Surface((width, height), pygame.SRCALPHA).convert_alpha()
         image.blit(self.sheet, (0,0), ((x * width), 0, width, height))
         image.set_colorkey()
         return image

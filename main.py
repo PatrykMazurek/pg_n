@@ -40,10 +40,10 @@ for r in range(row):
         if board_map[c,r] != 0:
             board_wall.add(BoardTile(board_map[c,r], r, c))
 
-player = Player(1,1, "bohater")
+player = Player(1,1, "person_1")
 all_enemies = pygame.sprite.Group()
-all_enemies.add(Enemy(4, 5, player, "boch_1"))
-all_enemies.add(Enemy(9, 8, player, "boch_1"))
+all_enemies.add(Enemy(4, 5, player, "enemy_1"))
+all_enemies.add(Enemy(9, 8, player, "enemy_3"))
 
 coins = pygame.sprite.Group()
 # coins.add(ObjectMap(5,7, "coin",player))

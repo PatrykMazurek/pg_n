@@ -4,10 +4,11 @@ from hero import Hero
 
 class Enemy(Hero):
 
-    def __init__(self, x, y, name, player):
+    def __init__(self, x, y, player, name):
         super().__init__(x, y, name)
         self.speed = 1.5
         self.player = player
+        self.get_enemy_img(name)
 
     def move(self, type):
         if type != None:
@@ -54,6 +55,15 @@ class Enemy(Hero):
                             if board_map[self.row+1, self.cell] == 2:
                                 self.dest_pos = self.set_position(self.row, self.cell)
 
+
+    def get_enemy_img(self, name):
+        width, height = 16, 16
+        enemy_img_pos = { "enemy_1": 0, "enemy_2": 1, "enemy_3": 2, "enemy_4": 3}
+        img = pygame.image.load( os.path.join("assets", "objects", "Dungeon_Character_2.png") )
+        image = pygame.Surface((width, height), pygame.SRCALPHA).convert_alpha()
+        image.blit(img, (0,0), ((enemy_img_pos[name] * width), 0, width, height))
+        image.set_colorkey()
+        self.image = image
 
     def check_distance(self):
         dx = self.player.pose.x - self.rect.centerx
