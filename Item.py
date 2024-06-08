@@ -1,9 +1,10 @@
 import pygame
 from board_map import *
 
-class Item(pygame.surface.Surface):
+class Item(pygame.sprite.Sprite):
 
     def __init__(self, row, cell, type, value=0 ) -> None:
+        pygame.sprite.Sprite.__init__(self)
         # typ i nazwa obiektu
         self.type = type
         self.name = None
@@ -30,10 +31,12 @@ class Item(pygame.surface.Surface):
         return temp_pos
     
     def cut_image(self, type):
-        item_pos = {"coin": [[3,3], [3,4], [4,3]],
-                    "box" : [[2,4], [2,5], [2,6], [4,4], [4,5], [4,6]],
-                    "task": [[2,11], [3,11], [4,11]],
-                    "key" : [[4,8],[4,9]]}
+        item_pos = {"coin": [[3, 3], [3, 4], [4, 3]],
+                    "box" : [[4, 2], [5, 2], [6, 2], [4, 4], [5, 4], [6, 4]],
+                    "task": [[11, 2], [11, 3], [11, 4]],
+                    "key" : [[8, 4],[9, 4]],
+                    "apple": [[10, 3]]
+                    }
         
         sheet = pygame.image.load(os.path.join("assets", "objects", "Dungeon_item_props_v2.png"))
         img = pygame.Surface((16,16))
