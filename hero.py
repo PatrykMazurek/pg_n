@@ -20,6 +20,8 @@ class Hero(pygame.sprite.Sprite):
         self.rect.center = self.pose
         self.dest_pos = self.get_position(x,y)
         # pola dotyczące wyposarzenia i zachowania 
+        self.coin = 0
+        self.active_task = []
         self.equipment = []
         self.behavior = None
 

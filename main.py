@@ -6,6 +6,7 @@ from enemy import Enemy
 # from object_map import ObjectMap
 from sprite_animation import SpriteAnimation
 from item import Item
+from game_task import Task
 
 WIDTH, HEIGHT = 800, 650
 FPS = 60
@@ -17,11 +18,11 @@ clock = pygame.time.Clock()
 
 run = True
 
-def draw_window(win, board_group, player, enemies_group, coin_group, animation):
+def draw_window(win, board_group, player, enemies_group, animation, items_group):
     win.fill((30,30,30))
     board_group.draw(win)
     enemies_group.draw(win)
-    coin_group.draw(win)
+    items_group.draw(win)
     win.blit(player.image, player.rect)
     animation.draw(win)
     pygame.display.update()
@@ -45,9 +46,13 @@ all_enemies = pygame.sprite.Group()
 all_enemies.add(Enemy(4, 5, player, "enemy_1"))
 all_enemies.add(Enemy(9, 8, player, "enemy_3"))
 
-coins = pygame.sprite.Group()
-# coins.add(ObjectMap(5,7, "coin",player))
-# coins.add(Item(3, 5, "coin", value=10))
+items_on_map = pygame.sprite.Group()
+items_on_map.add(Item( 3, 3, "coin", 20))
+task_1 = Item(7, 2, "task")
+task_1.task = Task(1)
+items_on_map.add(task_1)
+
+
 
 sprite_img = pygame.image.load(os.path.join("assets", "objects", "torch.png"))
 animation_step = 6
@@ -83,9 +88,9 @@ while run:
     player.update(offset)
     all_enemies.update(offset)
     light_animation.update(offset)
-    # coins.update(offset)
+    items_on_map.update(offset)
 
-    draw_window(win, board_wall, player, all_enemies, coins, light_animation)
+    draw_window(win, board_wall, player, all_enemies, light_animation, items_on_map)
 
 pygame.quit()
     

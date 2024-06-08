@@ -39,7 +39,7 @@ class Item(pygame.sprite.Sprite):
                     }
         
         sheet = pygame.image.load(os.path.join("assets", "objects", "Dungeon_item_props_v2.png"))
-        img = pygame.Surface((16,16))
+        img = pygame.Surface((16,16), pygame.SRCALPHA)
         pos = random.choice(item_pos[type])
         pos = [pos[0] * 16, pos[1] * 16, 16, 16]
         img.blit(sheet, (0,0), pos)
