@@ -7,6 +7,7 @@ from enemy import Enemy
 from sprite_animation import SpriteAnimation
 from item import Item
 from game_task import Task
+from game_collision import GameCollision
 
 WIDTH, HEIGHT = 800, 650
 FPS = 60
@@ -41,6 +42,8 @@ for r in range(row):
         if board_map[c,r] != 0:
             board_wall.add(BoardTile(board_map[c,r], r, c))
 
+game_collision = GameCollision()
+
 player = Player(1,1, "person_1")
 all_enemies = pygame.sprite.Group()
 all_enemies.add(Enemy(4, 5, player, "enemy_1"))
@@ -51,7 +54,17 @@ items_on_map.add(Item( 3, 3, "coin", 20))
 task_1 = Item(7, 2, "task")
 task_1.task = Task(1)
 items_on_map.add(task_1)
+# tworzenei skrzyni 
+box_1 = Item( 4, 18, "box")
+box_1.task = Task(1)
+box_1.equipment.append(Item(0,0, "coin", 20))
+box_1.equipment.append(Item(0,0, "apple"))
+box_1.equipment.append(Item(0,0, "apple"))
+items_on_map.add(box_1)
 
+key_1 = Item(15,17, "key")
+key_1.name = "key to box"
+items_on_map.add(key_1)
 
 
 sprite_img = pygame.image.load(os.path.join("assets", "objects", "torch.png"))
@@ -81,7 +94,9 @@ while run:
         if light_animation.frame >= animation_step:
             light_animation.frame = 0
 
-    check_collision(player, all_enemies)
+    # check_collision(player, all_enemies)
+    game_collision.item_cillision(player, items_on_map)
+    game_collision.enemy_collision(player, all_enemies)
     offset = maps.determine_offset(pygame.mouse.get_pos(), WIDTH, HEIGHT)
     global_offset += offset
     board_wall.update(offset)

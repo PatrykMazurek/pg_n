@@ -2,6 +2,7 @@ from typing import Any
 import pygame, math
 from pygame.math import Vector2
 from board_map import *
+from collections import deque
 
 class Hero(pygame.sprite.Sprite):
 
@@ -19,6 +20,10 @@ class Hero(pygame.sprite.Sprite):
         self.pose = self.get_position(x,y)
         self.rect.center = self.pose
         self.dest_pos = self.get_position(x,y)
+        # pola do poszukiwania drogi
+        self.map_dest_pos = (self.row, self.cell)
+        self.map_current_pos = (self.row, self.cell)
+        self.path = []
         # pola dotyczące wyposarzenia i zachowania 
         self.coin = 0
         self.active_task = []
@@ -41,15 +46,23 @@ class Hero(pygame.sprite.Sprite):
             dy /= distance
             speed = 2
             return Vector2(dx * speed, dy * speed)
+        elif distance <= 0.1 and len(self.path) > 0:
+            temp_pos = self.path.pop()
+            self.map_current_pos = temp_pos
+            print("kolejna pozycja {}".format(temp_pos))
+            self.dest_pos = self.get_position(temp_pos[0], temp_pos[1])
         return Vector2(0,0)
     
-    def move(self, row, coll):
+    def move(self, row, cell):
         # określenie pozycji pod względem kolumny i wiersza z mapy 
-        if board_map[row, coll] == 2:
+        if board_map[row, cell] == 2:
+            self.map_dest_pos = (row, cell)
+            self.path = self.bfs_algorithm(self.map_current_pos, self.map_dest_pos)
+            print(self.path)
             print("umieszczam naszego gracza ")
-            self.dest_pos.x = coll * TILE_SIZE[0] + int(TILE_SIZE[0]/2)
-            self.dest_pos.y = row * TILE_SIZE[1] + int(TILE_SIZE[1]/2)
-            self.dest_pos += global_offset
+            # self.dest_pos.x = coll * TILE_SIZE[0] + int(TILE_SIZE[0]/2)
+            # self.dest_pos.y = row * TILE_SIZE[1] + int(TILE_SIZE[1]/2)
+            # self.dest_pos += global_offset
         else:
             print("nie dozowlone miejsce")
 
@@ -59,3 +72,31 @@ class Hero(pygame.sprite.Sprite):
         temp_pos.y = row * TILE_SIZE[1] + int(TILE_SIZE[1]/2)
         temp_pos += global_offset
         return temp_pos
+    
+    def bfs_algorithm(self, start, end):
+        map_size = board_map.shape
+        direction = [ (-1, 0), (1,0), (0,-1), (0,1) ]
+        queue = deque( [start] )
+        visited = set()
+        visited.add(start)
+        parent = {start: None}
+
+        while queue:
+            current = queue.popleft()
+
+            if current == end:
+                break
+            for direct in direction:
+                neighbor = (current[0] + direct[0], current[1] + direct[1] )
+                if ( 0 <=current[0] < map_size[0] and 0 <=current[1] < map_size[1] 
+                    and board_map[current[0], current[1]] == 2 and neighbor not in visited ):
+                    queue.append(neighbor)
+                    visited.add(neighbor)
+                    parent[neighbor] = current
+
+        path = []
+        step = end
+        while step is not None:
+            path.append(step)
+            step = parent[step]
+        return path

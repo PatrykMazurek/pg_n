@@ -9,7 +9,11 @@ class GameCollision:
     def enemy_collision(self, player, enemies):
         collison = pygame.sprite.spritecollide(player, enemies, False)
         if len(collison) > 0:
-            print(collison[0].behavior)
+            enemy = collison[0]
+            if enemy.name == "enemy_1":
+                print("wykonuje przejscie gracza")
+                if len(enemy.path) == 0:
+                    enemy.move( 15,16 )
 
     def item_cillision(self, player, items):
         collison = pygame.sprite.spritecollide(player, items, False)

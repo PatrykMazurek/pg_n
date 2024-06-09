@@ -18,7 +18,7 @@ class Item(pygame.sprite.Sprite):
         # dodakiwe własnści obiektu
         self.task = None
         self.coin_value = value
-        self.equpment = []
+        self.equipment = []
 
     def update(self, offset) -> None:
         self.rect.x += offset.x
